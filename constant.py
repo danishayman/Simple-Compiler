@@ -1,6 +1,7 @@
+# Description: This file contains the constant values used in the compiler.
 TOKEN_PATTERNS = [
     # Keywords
-    ("KEYWORD", r'\b(if|else|print|while|for|int|return)\b'),
+    ("KEYWORD", r'\b(if|else|print|while|for|int|float|return|def)\b'),
 
     # Identifiers
     ("IDENTIFIER", r'\b[a-zA-Z_][a-zA-Z0-9_]*\b'),
@@ -8,13 +9,14 @@ TOKEN_PATTERNS = [
     # Literals
     ("INTEGER", r'\b\d+\b'),
     ("FLOAT", r'\b\d+\.\d+\b'),
-    ("STRING", r'"[^"]*"'),  # Basic string support
+    ("STRING", r'"[^"]*"'),  
     ("BOOLEAN", r'\b(true|false)\b'),
 
     # Operators
     ("ASSIGNMENT", r'='),
-    ("ARITHMETIC", r'[+\-*/]'),
-    ("COMPARISON", r'(>=|<=|==|!=|[><=])'),
+    ("ARITHMETIC", r'[+\-*/%]'),  
+    ("COMPARISON", r'(>=|<=|!=|[><])'),
+    ("EQUALITY", r'=='),
 
     # Punctuation
     ("LBRACE", r'\{'),
@@ -22,8 +24,9 @@ TOKEN_PATTERNS = [
     ("LPAREN", r'\('),
     ("RPAREN", r'\)'),
     ("SEMICOLON", r';'),
+    ("COMMA", r','),
 
-    # Comments
+    # Comments (ignored)
     ("COMMENT", r'//.*'),
 
     # Whitespace (ignored)
