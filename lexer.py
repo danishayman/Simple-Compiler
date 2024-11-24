@@ -1,26 +1,5 @@
 import re
-
-# Define token patterns
-TOKEN_PATTERNS = [
-    ("KEYWORD", r'\b(if|else|print|while|for|int|float|return|def)\b'),
-    ("IDENTIFIER", r'\b[a-zA-Z_][a-zA-Z0-9_]*\b'),
-    ("INTEGER", r'\b\d+\b'),
-    ("FLOAT", r'\b\d+\.\d+\b'),
-    ("STRING", r'"[^"]*"'),
-    ("BOOLEAN", r'\b(true|false)\b'),
-    ("ASSIGNMENT", r'='),
-    ("ARITHMETIC", r'[+\-*/%]'),
-    ("COMPARISON", r'(>=|<=|!=|[><])'),
-    ("EQUALITY", r'=='),
-    ("LBRACE", r'\{'),
-    ("RBRACE", r'\}'),
-    ("LPAREN", r'\('),
-    ("RPAREN", r'\)'),
-    ("SEMICOLON", r';'),
-    ("COMMA", r','),
-    ("COMMENT", r'//.*'),
-    ("WHITESPACE", r'\s+'),
-]
+from constant import TOKEN_PATTERNS
 
 def compile_token_patterns(token_patterns):
     """
