@@ -13,13 +13,22 @@ def run_test_case(file_path):
         source_code = file.read()
     
     try:
+        # Run the lexer to generate tokens
         tokens = tokenize(source_code)
         display_tokens(tokens)
         print("\n" + "="*40 + "\n")
+        
+        # Run the parser on the tokens
         Parser(tokens)
+        print(f"Test case {file_path} passed.\n")
+    except SyntaxError as e:
+        print(f"Syntax error in {file_path}: {e}")
     except ValueError as e:
-        print(f"Error processing {file_path}: {e}")
-    print("\n" + "="*40 + "\n")
+        print(f"Lexer error in {file_path}: {e}")
+    except Exception as e:
+        print(f"Unexpected error in {file_path}: {e}")
+    finally:
+        print("\n" + "="*40 + "\n")
 
 
 # Get all test case files in the test_cases directory

@@ -49,48 +49,58 @@ class Parser:
         Parses an if statement, including else if and else blocks.
         """
         self.consume("KEYWORD", "if")
-        self.consume("LPAREN")
-        self.expression()
-        self.consume("RPAREN")
-    
+        self.consume("LPAREN")  # Expect '('
+        self.expression()       # Parse the condition inside parentheses
+
+        if not self.match("RPAREN"):  # Check if closing parenthesis is missing
+            self.error("Missing closing parenthesis for if condition.")
+        self.consume("RPAREN")  # Consume ')'
+
         print("Parsed if condition.")
         print("\n")
-    
-        self.consume("LBRACE")
+
+        self.consume("LBRACE")  # Expect '{'
         while self.current_token and self.current_token[1] != "RBRACE":
             self.statement()
-        self.consume("RBRACE")
-    
+        if not self.match("RBRACE"):  # Check if closing brace is missing
+            self.error("Missing closing brace for if block.")
+        self.consume("RBRACE")  # Consume '}'
+
         print("Parsed if block.")
         print("\n")
-    
-        while self.match("KEYWORD", "else") and self.check_next("KEYWORD", "if"):  # Check for 'else if'
+
+        # Handle else-if and else blocks similarly, ensuring proper matching
+        while self.match("KEYWORD", "else") and self.check_next("KEYWORD", "if"):
             self.consume("KEYWORD", "else")
             self.consume("KEYWORD", "if")
             self.consume("LPAREN")
             self.expression()
+            if not self.match("RPAREN"):
+                self.error("Missing closing parenthesis for else-if condition.")
             self.consume("RPAREN")
-    
-            print("Parsed else if condition.")
+            print("Parsed else-if condition.")
             print("\n")
-    
+
             self.consume("LBRACE")
             while self.current_token and self.current_token[1] != "RBRACE":
                 self.statement()
+            if not self.match("RBRACE"):
+                self.error("Missing closing brace for else-if block.")
             self.consume("RBRACE")
-    
-            print("Parsed else if block.")
+            print("Parsed else-if block.")
             print("\n")
-    
-        if self.match("KEYWORD", "else"):  # Check for final 'else'
+
+        if self.match("KEYWORD", "else"):
             self.consume("KEYWORD", "else")
             self.consume("LBRACE")
             while self.current_token and self.current_token[1] != "RBRACE":
                 self.statement()
+            if not self.match("RBRACE"):
+                self.error("Missing closing brace for else block.")
             self.consume("RBRACE")
-    
             print("Parsed else block.")
             print("\n")
+
     
     def check_next(self, expected_type, expected_lexeme=None):
         """
@@ -168,9 +178,9 @@ class Parser:
         """
         if self.is_at_end():
             self.error(f"Unexpected end of input. Expected {expected_type}.")
-    
+
         actual_type, actual_lexeme, line = self.current_token[1], self.current_token[0], self.current_token[2]
-    
+
         if actual_type == expected_type and (expected_lexeme is None or actual_lexeme == expected_lexeme):
             print(f"Consumed token: {self.current_token}")
             self.current_index += 1
@@ -182,6 +192,7 @@ class Parser:
             expected = f"{expected_type} ('{expected_lexeme}')" if expected_lexeme else expected_type
             actual = f"{actual_type} ('{actual_lexeme}')"
             self.error(f"Expected {expected}, but found {actual} on line {line}.")
+
 
 
     def advance(self):
@@ -198,8 +209,14 @@ class Parser:
         """
         return self.current_index >= len(self.tokens)
 
+
     def error(self, message):
         """
-        Raise a syntax error with the current token and custom message.
+        Raise a syntax error with the current token and custom message, halting the parser.
         """
         raise SyntaxError(f"Syntax Error at token {self.current_token}: {message}")
+
+
+
+
+    
