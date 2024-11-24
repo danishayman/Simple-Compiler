@@ -3,5 +3,5 @@ y = x * 10;
 if (y > 40) {
  print (y);
 } else {
- print(x)
+ print(x);
 }

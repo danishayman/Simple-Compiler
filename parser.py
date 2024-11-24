@@ -1,9 +1,9 @@
 class Parser:
     def __init__(self, tokens):
-        self.tokens = tokens
-        self.current_index = 0
-        self.current_token = self.tokens[self.current_index]
-        self.parse()
+        self.tokens = tokens  # List of tokens to parse
+        self.current_index = 0  # Index of the current token
+        self.current_token = self.tokens[self.current_index]  # The current token being parsed
+        self.parse()  # Start parsing
 
     def parse(self):
         """
@@ -43,14 +43,13 @@ class Parser:
         print("Parsed assignment statement.")
         print("\n")
 
-
     def if_statement(self):
         """
         Parses an if statement, including else if and else blocks.
         """
         self.consume("KEYWORD", "if")
         self.consume("LPAREN")  # Expect '('
-        self.expression()       # Parse the condition inside parentheses
+        self.expression()  # Parse the condition inside parentheses
 
         if not self.match("RPAREN"):  # Check if closing parenthesis is missing
             self.error("Missing closing parenthesis for if condition.")
@@ -101,7 +100,6 @@ class Parser:
             print("Parsed else block.")
             print("\n")
 
-    
     def check_next(self, expected_type, expected_lexeme=None):
         """
         Checks the next token without consuming it.
@@ -110,7 +108,6 @@ class Parser:
             next_token = self.tokens[self.current_index + 1]
             return next_token[1] == expected_type and (expected_lexeme is None or next_token[0] == expected_lexeme)
         return False
-
 
     def print_statement(self):
         """
@@ -139,11 +136,10 @@ class Parser:
         self.term()  # Parse the first term
 
         # Check for ARITHMETIC or COMPARISON operator
-        while self.current_token and self.current_token[1] in ("ARITHMETIC", "COMPARISON"):  
-            operator_type = self.current_token[1]  
+        while self.current_token and self.current_token[1] in ("ARITHMETIC", "COMPARISON"):
+            operator_type = self.current_token[1]
             self.consume(operator_type)  # Consume the operator
             self.term()  # Parse the next term
-
 
     def term(self):
         """
@@ -158,9 +154,6 @@ class Parser:
         else:
             self.error(f"Unexpected token: {self.current_token}")
 
-            self.error(f"Unexpected token: {self.current_token}")
-
-
     def match(self, token_type, value=None):
         """
         Check if the current token matches the given type (and optionally value).
@@ -171,7 +164,7 @@ class Parser:
             if value is None or self.current_token[0] == value:
                 return True
         return False
-    
+
     def consume(self, expected_type, expected_lexeme=None):
         """
         Consumes the current token if it matches the expected type (and optionally the expected lexeme).
@@ -193,8 +186,6 @@ class Parser:
             actual = f"{actual_type} ('{actual_lexeme}')"
             self.error(f"Expected {expected}, but found {actual} on line {line}.")
 
-
-
     def advance(self):
         """
         Move to the next token.
@@ -209,14 +200,8 @@ class Parser:
         """
         return self.current_index >= len(self.tokens)
 
-
     def error(self, message):
         """
         Raise a syntax error with the current token and custom message, halting the parser.
         """
         raise SyntaxError(f"Syntax Error at token {self.current_token}: {message}")
-
-
-
-
-    
