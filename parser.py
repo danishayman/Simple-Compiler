@@ -21,16 +21,19 @@ class Parser:
 
     def statement(self):
         """
-        Parse a statement (assignment, if, print, etc.).
+        Parse a statement (assignment, if, while, print, etc.).
         """
         if self.match("IDENTIFIER"):
             self.assignment_statement()
         elif self.match("KEYWORD", "if"):
             self.if_statement()
+        elif self.match("KEYWORD", "while"):
+            self.while_statement()
         elif self.match("KEYWORD", "print"):
             self.print_statement()
         else:
             self.error("Unexpected statement.")
+
 
     def assignment_statement(self):
         """
@@ -99,6 +102,30 @@ class Parser:
             self.consume("RBRACE")
             print("Parsed else block.")
             print("\n")
+            
+    def while_statement(self):
+        """
+        Parses a while loop statement.
+        """
+        self.consume("KEYWORD", "while")  # Expect 'while'
+        self.consume("LPAREN")  # Expect '('
+        self.expression()  # Parse the condition inside parentheses
+
+        if not self.match("RPAREN"):  # Check if closing parenthesis is missing
+            self.error("Missing closing parenthesis for while condition.")
+        self.consume("RPAREN")  # Consume ')'
+
+        print("Parsed while condition.\n")
+
+        self.consume("LBRACE")  # Expect '{'
+        while self.current_token and self.current_token[1] != "RBRACE":
+            self.statement()  # Parse statements inside the block
+        if not self.match("RBRACE"):  # Check if closing brace is missing
+            self.error("Missing closing brace for while block.")
+        self.consume("RBRACE")  # Consume '}'
+
+        print("Parsed while block.\n")
+
 
     def check_next(self, expected_type, expected_lexeme=None):
         """
@@ -210,4 +237,3 @@ class Parser:
             )
         else:
             raise ValueError(f"Syntax Error: {message}")
-    
