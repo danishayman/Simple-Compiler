@@ -201,7 +201,13 @@ class Parser:
         return self.current_index >= len(self.tokens)
 
     def error(self, message):
-        """
-        Raise a syntax error with the current token and custom message, halting the parser.
-        """
-        raise SyntaxError(f"Syntax Error at token {self.current_token}: {message}")
+        """Handles syntax errors and includes line information."""
+        if self.current_token:
+            lexeme, token_type, line_number = self.current_token
+            raise ValueError(
+                f"Syntax Error at line {line_number}: {message} "
+                f"(Token: '{lexeme}', Type: '{token_type}')"
+            )
+        else:
+            raise ValueError(f"Syntax Error: {message}")
+    
