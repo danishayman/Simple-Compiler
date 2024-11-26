@@ -105,26 +105,31 @@ class Parser:
             
     def while_statement(self):
         """
-        Parses a while loop statement.
+        Parse a while statement.
+        Example: while (x < 5) { ... }
         """
-        self.consume("KEYWORD", "while")  # Expect 'while'
+        self.consume("KEYWORD", "while")  # Consume 'while'
         self.consume("LPAREN")  # Expect '('
+    
         self.expression()  # Parse the condition inside parentheses
-
-        if not self.match("RPAREN"):  # Check if closing parenthesis is missing
-            self.error("Missing closing parenthesis for while condition.")
+    
+        if not self.match("RPAREN"):
+            self.error("Missing closing parenthesis for while condition.")  # Raise a syntax error
         self.consume("RPAREN")  # Consume ')'
-
-        print("Parsed while condition.\n")
-
+    
+        print("Parsed while condition.")
+        print("\n")
+    
         self.consume("LBRACE")  # Expect '{'
         while self.current_token and self.current_token[1] != "RBRACE":
-            self.statement()  # Parse statements inside the block
+            self.statement()
         if not self.match("RBRACE"):  # Check if closing brace is missing
             self.error("Missing closing brace for while block.")
         self.consume("RBRACE")  # Consume '}'
+    
+        print("Parsed while block.")
+        print("\n")
 
-        print("Parsed while block.\n")
 
 
     def check_next(self, expected_type, expected_lexeme=None):
@@ -211,7 +216,9 @@ class Parser:
         else:
             expected = f"{expected_type} ('{expected_lexeme}')" if expected_lexeme else expected_type
             actual = f"{actual_type} ('{actual_lexeme}')"
-            self.error(f"Expected {expected}, but found {actual} on line {line}.")
+            # This is a syntax error, not a lexer error
+            raise SyntaxError(f"Syntax Error at line {line}: Expected {expected}, but found {actual}.")
+
 
     def advance(self):
         """
@@ -231,9 +238,9 @@ class Parser:
         """Handles syntax errors and includes line information."""
         if self.current_token:
             lexeme, token_type, line_number = self.current_token
-            raise ValueError(
+            raise SyntaxError(
                 f"Syntax Error at line {line_number}: {message} "
                 f"(Token: '{lexeme}', Type: '{token_type}')"
             )
         else:
-            raise ValueError(f"Syntax Error: {message}")
+            raise SyntaxError(f"Syntax Error: {message}")
