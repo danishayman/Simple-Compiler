@@ -7,8 +7,8 @@ test_cases_dir = "test_cases"
 
 # Function to run lexer and parser on each test case file
 def run_test_case(file_path):
-    print(f"Running test case: {file_path}")
     print("\n")
+    print(f"\033[93mRunning test case: {file_path}...\033[0m")
     
     # Read the source code from the test case file
     with open(file_path, 'r') as file:
