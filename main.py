@@ -25,15 +25,18 @@ def run_test_case(file_path):
         # Run the parser on the tokens to check for syntax correctness
         Parser(tokens)
         print(f"\033[92mTest case {file_path} passed.\033[0m")
-    except SyntaxError as e:
-        # Handle syntax errors encountered during parsing
-        print(f"\033[91mSyntax error in {file_path}: {e}\033[0m")
     except ValueError as e:
         # Handle lexer errors encountered during tokenization
         print(f"\033[91mLexer error in {file_path}: {e}\033[0m")
+        
+    except SyntaxError as e:
+        # Handle syntax errors encountered during parsing
+        print(f"\033[91mSyntax error in {file_path}: {e}\033[0m")
+        
     except Exception as e:
         # Handle any other unexpected errors
         print(f"\003[91mUnexpected error in {file_path}: {e}\033[0m")
+        
     finally:
         # Print a separator for readability between test cases
         print("\n" + "="*40 + "\n")
