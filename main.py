@@ -75,7 +75,7 @@ def run_test_case(file_path):
         
         if expression_tokens:
             parse_tree = converter.convert_to_parse_tree(expression_tokens)
-            print("\033[94mParse Tree:\033[0m")
+            print("\033[94mAbstract Syntax Tree in Postorder Traversal:\033[0m")
             for i, node in enumerate(parse_tree, 1):
                 print(f"{node}")
         
